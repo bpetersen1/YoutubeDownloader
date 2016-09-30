@@ -1,11 +1,10 @@
-﻿
-namespace YouTube_Downloader
+﻿namespace YouTube_Downloader
 {
-    public enum  ColorEnum
+    public enum ColorEnum
     {
         Red = 1,
-        Yellow =2,
-        Green =3,
+        Yellow = 2,
+        Green = 3,
         White = 0
     }
 }

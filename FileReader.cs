@@ -9,13 +9,14 @@ namespace YouTube_Downloader
     {
         public static List<Url> GetYoutubreUrls()
         {
-            List<Url> urls = new List<Url>();
-            string line = string.Empty;
+            var urls = new List<Url>();
+            var line = string.Empty;
             using (var sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + Configs.ListFileName))
             {
                 while ((line = sr.ReadLine()) != null)
                 {
-                    Url u = new Url {
+                    var u = new Url
+                    {
                         YoutubeUrl = line
                     };
 
@@ -25,6 +26,5 @@ namespace YouTube_Downloader
                 return urls;
             }
         }
-        
     }
 }

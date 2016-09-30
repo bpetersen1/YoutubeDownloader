@@ -5,7 +5,7 @@ namespace YouTube_Downloader
     public static class SystemMessage
     {
         /// <summary>
-        /// Displays a message on the console with color. You could also pause or pause and exit the application
+        ///     Displays a message on the console with color. You could also pause or pause and exit the application
         /// </summary>
         /// <param name="message">Message to be displayed</param>
         /// <param name="color">ColorEnum</param>
@@ -13,7 +13,6 @@ namespace YouTube_Downloader
         /// <param name="pauseAndExit">bool</param>
         public static void WriteConsoleMessage(string message, ColorEnum color, bool pause, bool pauseAndExit)
         {
-
             Console.ForegroundColor = GetColor(color);
 
             Console.WriteLine(message);
@@ -33,14 +32,17 @@ namespace YouTube_Downloader
         {
             switch (color)
             {
-                case ColorEnum.Red: return ConsoleColor.Red;
+                case ColorEnum.Red:
+                    return ConsoleColor.Red;
 
-                case ColorEnum.Yellow: return ConsoleColor.Yellow;
+                case ColorEnum.Yellow:
+                    return ConsoleColor.Yellow;
 
-                case ColorEnum.Green: return ConsoleColor.Green;
+                case ColorEnum.Green:
+                    return ConsoleColor.Green;
 
-                default: return ConsoleColor.White;
-
+                default:
+                    return ConsoleColor.White;
             }
         }
     }

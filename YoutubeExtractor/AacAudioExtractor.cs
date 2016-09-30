@@ -32,39 +32,35 @@ namespace YoutubeExtractor
 
         public AacAudioExtractor(string path)
         {
-            this.VideoPath = path;
-            fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read, 64 * 1024);
+            VideoPath = path;
+            fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read, 64*1024);
         }
 
-        public string VideoPath { get; private set; }
+        public string VideoPath { get; }
 
         public void Dispose()
         {
-            this.fileStream.Dispose();
+            fileStream.Dispose();
         }
 
         public void WriteChunk(byte[] chunk, uint timeStamp)
         {
             if (chunk.Length < 1)
-            {
                 return;
-            }
 
             if (chunk[0] == 0)
             {
                 // Header
                 if (chunk.Length < 3)
-                {
                     return;
-                }
 
-                ulong bits = (ulong)BigEndianBitConverter.ToUInt16(chunk, 1) << 48;
+                var bits = (ulong) BigEndianBitConverter.ToUInt16(chunk, 1) << 48;
 
                 aacProfile = BitHelper.Read(ref bits, 5) - 1;
                 sampleRateIndex = BitHelper.Read(ref bits, 4);
                 channelConfig = BitHelper.Read(ref bits, 4);
 
-                if (aacProfile < 0 || aacProfile > 3)
+                if ((aacProfile < 0) || (aacProfile > 3))
                     throw new AudioExtractionException("Unsupported AAC profile.");
                 if (sampleRateIndex > 12)
                     throw new AudioExtractionException("Invalid AAC sample rate index.");
@@ -75,7 +71,7 @@ namespace YoutubeExtractor
             else
             {
                 // Audio data
-                int dataSize = chunk.Length - 1;
+                var dataSize = chunk.Length - 1;
                 ulong bits = 0;
 
                 // Reference: WriteADTSHeader from FAAC's bitstream.c

@@ -34,7 +34,7 @@ namespace YoutubeExtractor
         private FileStream fileStream;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlvFile"/> class.
+        ///     Initializes a new instance of the <see cref="FlvFile" /> class.
         /// </summary>
         /// <param name="inputPath">The path of the input.</param>
         /// <param name="outputPath">The path of the output without extension.</param>
@@ -42,79 +42,70 @@ namespace YoutubeExtractor
         {
             this.inputPath = inputPath;
             this.outputPath = outputPath;
-            this.fileStream = new FileStream(this.inputPath, FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024);
-            this.fileOffset = 0;
-            this.fileLength = fileStream.Length;
+            fileStream = new FileStream(this.inputPath, FileMode.Open, FileAccess.Read, FileShare.Read, 64*1024);
+            fileOffset = 0;
+            fileLength = fileStream.Length;
         }
-
-        public event EventHandler<ProgressEventArgs> ConversionProgressChanged;
 
         public bool ExtractedAudio { get; private set; }
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public event EventHandler<ProgressEventArgs> ConversionProgressChanged;
 
         /// <exception cref="AudioExtractionException">The input file is not an FLV file.</exception>
         public void ExtractStreams()
         {
-            this.Seek(0);
+            Seek(0);
 
-            if (this.ReadUInt32() != 0x464C5601)
-            {
-                // not a FLV file
+            if (ReadUInt32() != 0x464C5601)
                 throw new AudioExtractionException("Invalid input file. Impossible to extract audio track.");
-            }
 
-            this.ReadUInt8();
-            uint dataOffset = this.ReadUInt32();
+            ReadUInt8();
+            var dataOffset = ReadUInt32();
 
-            this.Seek(dataOffset);
+            Seek(dataOffset);
 
-            this.ReadUInt32();
+            ReadUInt32();
 
             while (fileOffset < fileLength)
             {
                 if (!ReadTag())
-                {
                     break;
-                }
 
                 if (fileLength - fileOffset < 4)
-                {
                     break;
-                }
 
-                this.ReadUInt32();
+                ReadUInt32();
 
-                double progress = (this.fileOffset * 1.0 / this.fileLength) * 100;
+                var progress = fileOffset*1.0/fileLength*100;
 
-                if (this.ConversionProgressChanged != null)
-                {
-                    this.ConversionProgressChanged(this, new ProgressEventArgs(progress));
-                }
+                if (ConversionProgressChanged != null)
+                    ConversionProgressChanged(this, new ProgressEventArgs(progress));
             }
 
-            this.CloseOutput(false);
+            CloseOutput(false);
         }
 
         private void CloseOutput(bool disposing)
         {
-            if (this.audioExtractor != null)
+            if (audioExtractor != null)
             {
-                if (disposing && this.audioExtractor.VideoPath != null)
-                {
+                if (disposing && (audioExtractor.VideoPath != null))
                     try
                     {
-                        File.Delete(this.audioExtractor.VideoPath);
+                        File.Delete(audioExtractor.VideoPath);
                     }
-                    catch { }
-                }
+                    catch
+                    {
+                    }
 
-                this.audioExtractor.Dispose();
-                this.audioExtractor = null;
+                audioExtractor.Dispose();
+                audioExtractor = null;
             }
         }
 
@@ -122,28 +113,28 @@ namespace YoutubeExtractor
         {
             if (disposing)
             {
-                if (this.fileStream != null)
+                if (fileStream != null)
                 {
-                    this.fileStream.Close();
-                    this.fileStream = null;
+                    fileStream.Close();
+                    fileStream = null;
                 }
 
-                this.CloseOutput(true);
+                CloseOutput(true);
             }
         }
 
         private IAudioExtractor GetAudioWriter(uint mediaInfo)
         {
-            uint format = mediaInfo >> 4;
+            var format = mediaInfo >> 4;
 
             switch (format)
             {
                 case 14:
                 case 2:
-                    return new Mp3AudioExtractor(this.outputPath);
+                    return new Mp3AudioExtractor(outputPath);
 
                 case 10:
-                    return new AacAudioExtractor(this.outputPath);
+                    return new AacAudioExtractor(outputPath);
             }
 
             string typeStr;
@@ -172,50 +163,48 @@ namespace YoutubeExtractor
         {
             var buff = new byte[length];
 
-            this.fileStream.Read(buff, 0, length);
-            this.fileOffset += length;
+            fileStream.Read(buff, 0, length);
+            fileOffset += length;
 
             return buff;
         }
 
         private bool ReadTag()
         {
-            if (this.fileLength - this.fileOffset < 11)
+            if (fileLength - fileOffset < 11)
                 return false;
 
             // Read tag header
-            uint tagType = ReadUInt8();
-            uint dataSize = ReadUInt24();
-            uint timeStamp = ReadUInt24();
-            timeStamp |= this.ReadUInt8() << 24;
-            this.ReadUInt24();
+            var tagType = ReadUInt8();
+            var dataSize = ReadUInt24();
+            var timeStamp = ReadUInt24();
+            timeStamp |= ReadUInt8() << 24;
+            ReadUInt24();
 
             // Read tag data
             if (dataSize == 0)
                 return true;
 
-            if (this.fileLength - this.fileOffset < dataSize)
+            if (fileLength - fileOffset < dataSize)
                 return false;
 
-            uint mediaInfo = this.ReadUInt8();
+            var mediaInfo = ReadUInt8();
             dataSize -= 1;
-            byte[] data = this.ReadBytes((int)dataSize);
+            var data = ReadBytes((int) dataSize);
 
             if (tagType == 0x8)
             {
                 // If we have no audio writer, create one
-                if (this.audioExtractor == null)
+                if (audioExtractor == null)
                 {
-                    this.audioExtractor = this.GetAudioWriter(mediaInfo);
-                    this.ExtractedAudio = this.audioExtractor != null;
+                    audioExtractor = GetAudioWriter(mediaInfo);
+                    ExtractedAudio = audioExtractor != null;
                 }
 
-                if (this.audioExtractor == null)
-                {
+                if (audioExtractor == null)
                     throw new InvalidOperationException("No supported audio writer found.");
-                }
 
-                this.audioExtractor.WriteChunk(data, timeStamp);
+                audioExtractor.WriteChunk(data, timeStamp);
             }
 
             return true;
@@ -225,8 +214,8 @@ namespace YoutubeExtractor
         {
             var x = new byte[4];
 
-            this.fileStream.Read(x, 1, 3);
-            this.fileOffset += 3;
+            fileStream.Read(x, 1, 3);
+            fileOffset += 3;
 
             return BigEndianBitConverter.ToUInt32(x, 0);
         }
@@ -235,22 +224,22 @@ namespace YoutubeExtractor
         {
             var x = new byte[4];
 
-            this.fileStream.Read(x, 0, 4);
-            this.fileOffset += 4;
+            fileStream.Read(x, 0, 4);
+            fileOffset += 4;
 
             return BigEndianBitConverter.ToUInt32(x, 0);
         }
 
         private uint ReadUInt8()
         {
-            this.fileOffset += 1;
-            return (uint)this.fileStream.ReadByte();
+            fileOffset += 1;
+            return (uint) fileStream.ReadByte();
         }
 
         private void Seek(long offset)
         {
-            this.fileStream.Seek(offset, SeekOrigin.Begin);
-            this.fileOffset = offset;
+            fileStream.Seek(offset, SeekOrigin.Begin);
+            fileOffset = offset;
         }
     }
 }

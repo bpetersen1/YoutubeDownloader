@@ -4,18 +4,19 @@ namespace YouTube_Downloader
 {
     public static class SystemCheck
     {
-
         public static void DoFilesystemCheck()
         {
-            DirectoryInfo di = new DirectoryInfo(Configs.Savepath);
+            var di = new DirectoryInfo(Configs.Savepath);
 
-            FileInfo fi = new FileInfo(Configs.FullPathToList);
+            var fi = new FileInfo(Configs.FullPathToList);
 
             CheckDirectoryExists(di);
 
             CheckListExists(fi);
 
-            if (IsListFileEmpty()) SystemMessage.WriteConsoleMessage($"{Configs.ListFileName} is empty please add some youtube url's", ColorEnum.Yellow, false, true);
+            if (IsListFileEmpty())
+                SystemMessage.WriteConsoleMessage($"{Configs.ListFileName} is empty please add some youtube url's",
+                    ColorEnum.Yellow, false, true);
         }
 
         private static void CheckDirectoryExists(DirectoryInfo di)
