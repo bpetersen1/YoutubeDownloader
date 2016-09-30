@@ -20,7 +20,7 @@ namespace YouTube_Downloader
 
             CheckListExists(fi);
 
-            if (isListFileEmpty()) SystemMessage.WriteConsoleMessage($"{Configs.ListFileName} is empty please add some youtube url's", ColorEnum.Yellow, false, true);
+            if (IsListFileEmpty()) SystemMessage.WriteConsoleMessage($"{Configs.ListFileName} is empty please add some youtube url's", ColorEnum.Yellow, false, true);
         }
 
         private static void CheckDirectoryExists(DirectoryInfo di)
@@ -33,7 +33,7 @@ namespace YouTube_Downloader
             if (!fi.Exists) fi.Create().Dispose();
         }
 
-        private static bool isListFileEmpty()
+        private static bool IsListFileEmpty()
         {
             return new FileInfo(Configs.FullPathToList).Length < 1;
         }

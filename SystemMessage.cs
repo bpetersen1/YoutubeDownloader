@@ -18,7 +18,7 @@ namespace YouTube_Downloader
         public static void WriteConsoleMessage(string message, ColorEnum color, bool pause, bool pauseAndExit)
         {
 
-            Console.ForegroundColor = getColor(color);
+            Console.ForegroundColor = GetColor(color);
 
             Console.WriteLine(message);
 
@@ -33,7 +33,7 @@ namespace YouTube_Downloader
             }
         }
 
-        private static ConsoleColor getColor(ColorEnum color)
+        private static ConsoleColor GetColor(ColorEnum color)
         {
             switch (color)
             {

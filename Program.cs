@@ -34,7 +34,7 @@ namespace YouTube_Downloader
             totaltime.Start();
 
             //Pull down each video in the list
-            foreach (var item in FileReader.GetYoutubreURLS())
+            foreach (var item in FileReader.GetYoutubreUrls())
             {
                 try
                 {

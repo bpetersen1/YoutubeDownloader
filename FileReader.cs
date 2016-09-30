@@ -7,7 +7,7 @@ namespace YouTube_Downloader
 {
     public static class FileReader
     {
-        public static List<Url> GetYoutubreURLS()
+        public static List<Url> GetYoutubreUrls()
         {
             List<Url> urls = new List<Url>();
             string line = string.Empty;

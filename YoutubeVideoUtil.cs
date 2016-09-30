@@ -9,17 +9,17 @@ namespace YouTube_Downloader
 {
    public static class YoutubeVideoUtil
     {
-        public static VideoInfo GetUserQualityOrDefault(string youtubeURL) {
+        public static VideoInfo GetUserQualityOrDefault(string youtubeUrl) {
 
-            IEnumerable<VideoInfo> v = GetListFromYoutube(youtubeURL);
+            IEnumerable<VideoInfo> v = GetListFromYoutube(youtubeUrl);
 
             return SortedYoutubeObject(v);
         }
 
 
-        private static IEnumerable<VideoInfo> GetListFromYoutube(string youtubeURL) {
+        private static IEnumerable<VideoInfo> GetListFromYoutube(string youtubeUrl) {
 
-            IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(youtubeURL);
+            IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(youtubeUrl);
 
             return videoInfos;
         }
