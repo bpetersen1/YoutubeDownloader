@@ -62,15 +62,15 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorEnum.cs" />
-    <Compile Include="Configs.cs" />
-    <Compile Include="FileReader.cs" />
-    <Compile Include="HelplerMethods.cs" />
+    <Compile Include="Utils\ColorEnum.cs" />
+    <Compile Include="Utils\Configs.cs" />
+    <Compile Include="Utils\FileReader.cs" />
+    <Compile Include="Utils\HelplerMethods.cs" />
     <Compile Include="Objects\Url.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemCheck.cs" />
-    <Compile Include="SystemMessage.cs" />
+    <Compile Include="Utils\SystemCheck.cs" />
+    <Compile Include="Utils\SystemMessage.cs" />
     <Compile Include="YoutubeExtractor\AacAudioExtractor.cs" />
     <Compile Include="YoutubeExtractor\AdaptiveType.cs" />
     <Compile Include="YoutubeExtractor\AudioDownloader.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="YoutubeExtractor\VideoNotAvailableException.cs" />
     <Compile Include="YoutubeExtractor\VideoType.cs" />
     <Compile Include="YoutubeExtractor\YoutubeParseException.cs" />
-    <Compile Include="YoutubeVideoUtil.cs" />
+    <Compile Include="Utils\YoutubeVideoUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
