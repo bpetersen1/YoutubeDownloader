@@ -17,6 +17,8 @@ namespace YouTube_Downloader
 
             SystemMessage.WriteConsoleMessage($"By Bradley Petersen{Environment.NewLine}", ColorEnum.White, false, false);
 
+            SystemMessage.WriteConsoleMessage($"https://za.linkedin.com/in/bradleypetersen {Environment.NewLine}",ColorEnum.Yellow, false,false);
+
             SystemCheck.DoFilesystemCheck();
 
             SystemMessage.WriteConsoleMessage($"Video's will be saved in the following directory : {Configs.Savepath}",
